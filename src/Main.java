@@ -44,7 +44,7 @@ public class Main {
 
         //calculated values:
         int BtyeRate = SampleRate * NumChannels * BitsPerSample / 8;
-        short BlockAlign = (byte) (NumChannels * BitsPerSample / 8);
+        short BlockAlign = (short) (NumChannels * BitsPerSample / 8);
 
         
         try {
@@ -65,18 +65,8 @@ public class Main {
 
 
 
-
-
-
-
-
-
-        } catch (IOException ex) {
-            System.getLogger(Main.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
-
-
     }
 }
