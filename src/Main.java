@@ -1,25 +1,26 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-
 public class Main {
-    
-    private static void writeLEShort(FileOutputStream out, short value) throws IOException{
-            out.write(value & 0xFF);
-            out.write((value >>> 8) & 0xFF);
-    }
-    private static void writeLEInt(FileOutputStream out, int value) throws IOException{
-            out.write(value & 0xFF);
-            out.write((value >>> 8) & 0xFF);
-            out.write((value >>> 16) & 0xFF);
-            out.write((value >>> 24) & 0xFF);
-    }
-    private static void writeASCII(FileOutputStream out, String s) throws IOException{
-            out.write(s.getBytes(StandardCharsets.US_ASCII));
-    }
-
     public static void main(String[] args) {
+        AudioClip clip = AudioReader.readAudio("bell.wav");
+        
+        if (clip.header == null || clip.header.length < 44) {
+            throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
+        }
+
+        VolumeChanger changer = new VolumeChanger(2.0d);
+        AudioClip newClip = changer.applyEffect(clip);
+
+        try {
+            FileCreator.writeAudioClip(newClip, "bell_louder.wav");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+        /*
         //Non changing values:
         String RIFF = "RIFF";
         String fmt = "fmt ";
@@ -71,10 +72,10 @@ public class Main {
               short pcmValue = (short) (sample * amplitude);
               writeLEShort(out, pcmValue);
             }
-            ArrayList<Short> samples = AudioReader.ReadAudio();
+            AudioClip samples = AudioReader.ReadAudio();
             System.out.println(samples);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-}
+        */

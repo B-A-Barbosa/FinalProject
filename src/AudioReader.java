@@ -1,19 +1,62 @@
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
 public class AudioReader {
-    public static ArrayList<Short> ReadAudio(){
-        try (FileInputStream in = new FileInputStream("Audio.wav")){
-            ArrayList<Short> samples = new ArrayList<Short>();
-            in.skip(44); //skip header
-            while (in.available() > 0){
-                int low = in.read(); //read low byte first
+
+    private static boolean checkCompatibility(byte[] header) {
+        if (header.length < 44) {
+            System.err.println("Header too short: " + header.length);
+            return false;
+        }
+
+        String riff = new String(header, 0, 4);
+        String wave = new String(header, 8, 4);
+        if (!riff.equals("RIFF") || !wave.equals("WAVE")) {
+            System.err.println("Invalid RIFF/WAVE markers.");
+            return false;
+        }
+
+        int audioFormat = ((header[21] & 0xFF) << 8) | (header[20] & 0xFF);
+        if (audioFormat != 1) {
+            System.err.println("Unsupported format: " + audioFormat + " (must be PCM = 1)");
+            return false;
+        }
+
+        int bitsPerSample = ((header[35] & 0xFF) << 8) | (header[34] & 0xFF);
+        if (bitsPerSample != 16) {
+            System.err.println("Unsupported bit depth: " + bitsPerSample + " (must be 16)");
+            return false;
+        }
+
+        int channels = ((header[23] & 0xFF) << 8) | (header[22] & 0xFF);
+        if (channels < 1 || channels > 2) {
+            System.err.println("Unsupported channel count: " + channels);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static AudioClip readAudio(String filePath) {
+        try (FileInputStream in = new FileInputStream(filePath)) {
+            byte[] header = in.readNBytes(44);
+            if (!checkCompatibility(header)) {
+                return null;
+            }
+
+            ArrayList<Short> samples = new ArrayList<>();
+            while (true) {
+                int low = in.read();
+                if (low == -1) break;
                 int high = in.read();
-                short sample = (short) ((high << 8) | low); //convert from LE to short
+                if (high == -1) break;
+                short sample = (short) ((high << 8) | (low & 0xFF));
                 samples.add(sample);
             }
-            return samples;
-        } catch (Exception e){
+
+            return new AudioClip(samples, header);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
