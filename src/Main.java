@@ -5,12 +5,14 @@ public class Main {
         if (clip.header == null || clip.header.length < 44) {
             throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
         }
+        //AudioEffect changer = new NothingDoer();
+        VolumeChanger changer = new VolumeChanger(100.0d);
+        PitchEffect changer2 = new PitchEffect(0.25d);
 
-        VolumeChanger changer = new VolumeChanger(2.0d);
-        AudioClip newClip = changer.applyEffect(clip);
+        AudioClip newClip = changer.applyEffect((changer2.applyEffect(clip)));
 
         try {
-            FileCreator.writeAudioClip(newClip, "bell_louder.wav");
+            FileCreator.writeAudioClipMinimal(newClip, "bell_louder.wav");
         } catch (Exception e){
             e.printStackTrace();
         }

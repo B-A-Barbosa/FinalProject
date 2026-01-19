@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 public class VolumeChanger extends AudioEffect {
@@ -24,7 +23,7 @@ public class VolumeChanger extends AudioEffect {
             sample = (short) newSample;
             newSamples.add(sample);
         }
-        return new AudioClip(newSamples, clip.header);
+        return new AudioClip(newSamples, clip.header.clone());
     }
     
 }
