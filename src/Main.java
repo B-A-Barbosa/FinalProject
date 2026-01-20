@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        AudioClip clip = AudioReader.readAudio("bell.wav");
+        AudioClip clip = FileManager.readAudio("bell.wav");
         
         if (clip.getHeader() == null || clip.getHeader().length < 44) {
             throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
@@ -10,7 +10,7 @@ public class Main {
         ReverseEffect effect3 = new ReverseEffect();
         AudioClip newClip = effect3.applyEffect(effect2.applyEffect(effect1.applyEffect(clip)));
         try {
-            FileCreator.writeAudioClipMinimal(newClip, newClip.getFileName());
+            FileManager.writeAudioClipMinimal(newClip, newClip.getFileName());
         } catch (Exception e){
             e.printStackTrace();
         }

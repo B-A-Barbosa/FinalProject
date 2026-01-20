@@ -1,9 +1,32 @@
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
-public final class FileCreator {
+public final class FileManager {
+    public static AudioClip readAudio(String filePath) {
+        try (FileInputStream in = new FileInputStream(filePath)) {
+            byte[] header = in.readNBytes(44);
+
+            ArrayList<Short> samples = new ArrayList<>();
+            while (true) {
+                int low = in.read();
+                if (low == -1) break;
+                int high = in.read();
+                if (high == -1) break;
+                short sample = (short) ((high << 8) | (low & 0xFF));
+                samples.add(sample);
+            }
+
+            return new AudioClip(filePath, samples, header);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void writeAudioClipMinimal(AudioClip clip, String filePath) throws IOException {
         int numChannels = clip.getNumChannels();
         int sampleRate = clip.getSampleRate();
@@ -33,26 +56,26 @@ public final class FileCreator {
 
         // RIFF
         out.write(new byte[]{'R','I','F','F'});
-        Utilx.writeLEInt(out, chunkSize);
+        ByteManager.writeLEInt(out, chunkSize);
         out.write(new byte[]{'W','A','V','E'});
 
         // fmt
         out.write(new byte[]{'f','m','t',' '});
-        Utilx.writeLEInt(out, 16);                 // Subchunk1Size for PCM
-        Utilx.writeLEShort(out, (short)1);         // AudioFormat = 1 (PCM)
-        Utilx.writeLEShort(out, (short)numChannels);
-        Utilx.writeLEInt(out, sampleRate);
-        Utilx.writeLEInt(out, byteRate);
-        Utilx.writeLEShort(out, (short)blockAlign);
-        Utilx.writeLEShort(out, (short)bitsPerSample);
+        ByteManager.writeLEInt(out, 16);                 // Subchunk1Size for PCM
+        ByteManager.writeLEShort(out, (short)1);         // AudioFormat = 1 (PCM)
+        ByteManager.writeLEShort(out, (short)numChannels);
+        ByteManager.writeLEInt(out, sampleRate);
+        ByteManager.writeLEInt(out, byteRate);
+        ByteManager.writeLEShort(out, (short)blockAlign);
+        ByteManager.writeLEShort(out, (short)bitsPerSample);
 
         // data
-        Utilx.writeASCII(out, "data");
-        Utilx.writeLEInt(out, dataBytes);
+        ByteManager.writeASCII(out, "data");
+        ByteManager.writeLEInt(out, dataBytes);
 
         // samples
         for (short s : samples) {
-            Utilx.writeLEShort(out, s); // little-endian, signed
+            ByteManager.writeLEShort(out, s); // little-endian, signed
         }
     }
 }
