@@ -4,10 +4,9 @@ import java.io.OutputStream;
 import java.util.List;
 
 public final class FileCreator {
-
     public static void writeAudioClipMinimal(AudioClip clip, String filePath) throws IOException {
-        int numChannels   = clip.getNumChannels();
-        int sampleRate    = clip.getSampleRate();
+        int numChannels = clip.getNumChannels();
+        int sampleRate = clip.getSampleRate();
         int bitsPerSample = clip.getBitsPerSample();
 
         if (bitsPerSample != 16) {
@@ -15,7 +14,7 @@ public final class FileCreator {
             throw new IllegalStateException("This writer expects 16-bit PCM samples.");
         }
 
-        try (FileOutputStream out = new FileOutputStream(filePath)) {
+        try (FileOutputStream out = new FileOutputStream("export/" + filePath + ".wav")) {
             writePcm16Minimal(clip.getSamples(), sampleRate, numChannels, out);
         }
     }
@@ -48,7 +47,7 @@ public final class FileCreator {
         Utilx.writeLEShort(out, (short)bitsPerSample);
 
         // data
-        out.write(new byte[]{'d','a','t','a'});
+        Utilx.writeASCII(out, "data");
         Utilx.writeLEInt(out, dataBytes);
 
         // samples

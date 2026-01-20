@@ -1,6 +1,5 @@
-
 public class PitchEffect extends AudioEffect {
-    private final double pitchFactor;
+    private double pitchFactor;
 
     public PitchEffect(double pitchFactor) {
         this.pitchFactor = pitchFactor;
@@ -11,8 +10,11 @@ public class PitchEffect extends AudioEffect {
         int originalSampleRate = clip.getSampleRate();
         clip.setSampleRate((int) Math.round(originalSampleRate * pitchFactor));
 
-        return new AudioClip(clip.samples, clip.header.clone());
+        if (pitchFactor > 1.0) {
+            return new AudioClip(clip.getFileName() + "_spedUp", clip.getSamples(), clip.getHeader().clone());
+        }
+        else{
+            return new AudioClip(clip.getFileName() + "_slowedDown", clip.getSamples(), clip.getHeader().clone());
+        }
     }
-
-    
 }

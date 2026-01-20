@@ -16,7 +16,7 @@ public class AudioReader {
                 samples.add(sample);
             }
 
-            return new AudioClip(samples, header);
+            return new AudioClip(filePath, samples, header);
         } catch (Exception e) {
             e.printStackTrace();
         }

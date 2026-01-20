@@ -1,4 +1,3 @@
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +13,7 @@ public class Utilx {
             out.write((value >>> 16) & 0xFF);
             out.write((value >>> 24) & 0xFF);
     }
-    public static void writeASCII(FileOutputStream out, String s) throws IOException{
+    public static void writeASCII(OutputStream out, String s) throws IOException{
             out.write(s.getBytes(StandardCharsets.US_ASCII));
     }
 }

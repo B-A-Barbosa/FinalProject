@@ -2,17 +2,15 @@ public class Main {
     public static void main(String[] args) {
         AudioClip clip = AudioReader.readAudio("bell.wav");
         
-        if (clip.header == null || clip.header.length < 44) {
+        if (clip.getHeader() == null || clip.getHeader().length < 44) {
             throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
         }
-        //AudioEffect changer = new NothingDoer();
-        VolumeChanger changer = new VolumeChanger(100.0d);
-        PitchEffect changer2 = new PitchEffect(0.25d);
-
-        AudioClip newClip = changer.applyEffect((changer2.applyEffect(clip)));
-
+        VolumeChanger effect1 = new VolumeChanger(2d);
+        PitchEffect effect2 = new PitchEffect(1.5d);
+        ReverseEffect effect3 = new ReverseEffect();
+        AudioClip newClip = effect3.applyEffect(effect2.applyEffect(effect1.applyEffect(clip)));
         try {
-            FileCreator.writeAudioClipMinimal(newClip, "bell_louder.wav");
+            FileCreator.writeAudioClipMinimal(newClip, newClip.getFileName());
         } catch (Exception e){
             e.printStackTrace();
         }

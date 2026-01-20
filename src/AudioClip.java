@@ -1,15 +1,23 @@
 import java.util.ArrayList;
 public class AudioClip {
-    public ArrayList<Short> samples;
-    public byte[] header;
-    
-    public AudioClip(ArrayList<Short> samples, byte[] header){
+    private ArrayList<Short> samples;
+    private byte[] header;
+    private String fileName;
+
+    public AudioClip(String filePath, ArrayList<Short> samples, byte[] header){
         this.samples = samples;
         this.header = header;
+        this.fileName = filePath.replace(".wav", "");
     }
-    
+
+    public String getFileName(){
+        return fileName;
+    }
     public ArrayList<Short> getSamples(){
         return samples;
+    }
+    public byte[] getHeader(){
+        return header;
     }
     
     public int getNumChannels() {
@@ -34,11 +42,9 @@ public class AudioClip {
         header[27] = (byte)((sampleRate >>> 24) & 0xFF);
     }
 
+    //TODO what
     private static int u32LE(byte[] b, int off) {
-        return  (b[off] & 0xFF)
-          | ((b[off+1] & 0xFF) << 8)
-          | ((b[off+2] & 0xFF) << 16)
-          | ((b[off+3] & 0xFF) << 24);
+        return (b[off] & 0xFF) | ((b[off+1] & 0xFF) << 8) | ((b[off+2] & 0xFF) << 16) | ((b[off+3] & 0xFF) << 24);
 }
 
 

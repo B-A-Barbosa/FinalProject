@@ -17,13 +17,16 @@ public class VolumeChanger extends AudioEffect {
     }
     @Override
     public AudioClip applyEffect(AudioClip clip) {
-        ArrayList<Short> newSamples = new ArrayList<>(clip.samples.size());
-        for (short sample :clip.samples){
+        ArrayList<Short> newSamples = new ArrayList<>(clip.getSamples().size());
+        for (short sample :clip.getSamples()){
             int newSample = Clamp((int) Math.round(sample * volumeFactor));
             sample = (short) newSample;
             newSamples.add(sample);
         }
-        return new AudioClip(newSamples, clip.header.clone());
+        if (volumeFactor > 1.0) {
+            return new AudioClip(clip.getFileName() + "_louder", newSamples, clip.getHeader().clone());
+        } else {
+            return new AudioClip(clip.getFileName() + "_quieter", newSamples, clip.getHeader().clone());
+        }
     }
-    
 }
