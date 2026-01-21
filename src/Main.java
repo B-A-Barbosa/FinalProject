@@ -5,10 +5,13 @@ public class Main {
         if (clip.getHeader() == null || clip.getHeader().length < 44) {
             throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
         }
-        VolumeChanger effect1 = new VolumeChanger(2d);
-        PitchEffect effect2 = new PitchEffect(1.5d);
-        ReverseEffect effect3 = new ReverseEffect();
-        AudioClip newClip = effect3.applyEffect(effect2.applyEffect(effect1.applyEffect(clip)));
+        //VolumeChanger effect1 = new VolumeChanger(2d);
+        //PitchEffect effect2 = new PitchEffect(1.5d);
+        //ReverseEffect effect3 = new ReverseEffect();
+        //AudioClip newClip = effect3.applyEffect(effect2.applyEffect(effect1.applyEffect(clip)));
+
+        BitCrusher effect = new BitCrusher();
+        AudioClip newClip = effect.applyEffect(clip);
         try {
             FileManager.writeAudioClipMinimal(newClip, newClip.getFileName());
         } catch (Exception e){

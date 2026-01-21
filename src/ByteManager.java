@@ -23,4 +23,13 @@ public class ByteManager {
     public static int readUIntLE(byte[] b, int off) {
         return (b[off] & 0xFF) | ((b[off+1] & 0xFF) << 8) | ((b[off+2] & 0xFF) << 16) | ((b[off+3] & 0xFF) << 24);
     }
+    public static short ClampShort(int value){
+        if (value > Short.MAX_VALUE) {
+            return Short.MAX_VALUE;
+        } else if (value < Short.MIN_VALUE) {
+            return Short.MIN_VALUE;
+        } else {
+            return (short) value;
+        }
+    }
 }
