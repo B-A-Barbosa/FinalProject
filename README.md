@@ -1,7 +1,7 @@
 # FinalProject
-**Included PDF houses day by day learning and work done **
+**Included PDF houses day by day learning and work done**
 
-**Google Drive link for runnable download: **
+**Google Drive link for runnable download:** https://drive.google.com/file/d/1oeSvPY-qU70T2iYTpRyJaYJehQdow0Qw/view?usp=sharing
 
 **General Info:**
 This project opens a window made with J frame, it allows you to pick a wav file on your computer, and add an effect to it.
@@ -21,7 +21,7 @@ This effect is also (in my opinion) the least impressive sounding, in other word
 In replacement, I would have made a fade in / fade out effect. 
 However, in the end I am glad i made it, because it made me finally understand the << and >> operations, although i had seen them when messing with sound generation, I hadn't fully understood them until I had to use them myself.
 
-**Main Topics learned: **
+**Main Topics learned:**
 Format of a computer file
 Format and specifications of a sound file (wav)
 little endian vs big endian
