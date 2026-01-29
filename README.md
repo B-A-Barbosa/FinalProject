@@ -1,5 +1,6 @@
 # FinalProject
 *CHECK INCLUDED PDF FOR PLANNING / PROCCESS*
+
 Outline:
 The program will have a jframe where you can select an audio file (wav, maybe others) and an effect. Once you select the effect you will be able to press a button labeled “apply” where it will change the data and create a new file. Each effect class will also have an undo function, and I will have an arraylist of the effects applied so that you can get your original audio back. The audio effect class will be abstract with the abstract method apply effect. I will make the project using the terminal first, and then port it to jframe.
 
