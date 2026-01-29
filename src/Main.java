@@ -5,15 +5,16 @@ public class Main {
         if (clip.getHeader() == null || clip.getHeader().length < 44) {
             throw new IllegalArgumentException("Header is missing or too short (must be at least 44 bytes for PCM WAV).");
         }
-        //VolumeChanger effect1 = new VolumeChanger(2d);
+        VolumeChanger effect1 = new VolumeChanger(2d);
         //PitchEffect effect2 = new PitchEffect(1.5d);
         //ReverseEffect effect3 = new ReverseEffect();
         //AudioClip newClip = effect3.applyEffect(effect2.applyEffect(effect1.applyEffect(clip)));
 
-        BitCrusher effect = new BitCrusher();
-        AudioClip newClip = effect.applyEffect(clip);
+
+        BitCrusher effect = new BitCrusher(4);
+        clip.applyEffect(effect1);
         try {
-            FileManager.writeAudioClipMinimal(newClip, newClip.getFileName());
+            FileManager.CreateFile(clip, clip.getFileName());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -21,7 +22,8 @@ public class Main {
 }
 
 
-
+//The following code was generated the "Audio.wav" file included in this project.
+//it is a pure sine wav, this means that it is a single note, the simplest type of sound wave possible
 
         /*
         //Non changing values:
@@ -81,4 +83,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-        */
+*/

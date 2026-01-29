@@ -1,17 +1,28 @@
 import java.util.ArrayList;
 
 public class BitCrusher extends AudioEffect {
-    private short crushSample(short sample) {
-        System.out.println("Original: " + sample + " Crushed: " + Math.round(sample / 4096.0) * 4096);
-        return (short) ByteManager.ClampShort((int) (Math.round(sample / 4096.0) * 4096));
+    private int keepBits;
+
+    public BitCrusher(int keepBits) {
+        this.keepBits = keepBits;
+    }
+
+    private static short crushSample(short s, int keepBits) {
+        int drop = 16 - keepBits;
+        //make a int version of our sample to work with
+        int v = s;
+        //remove drop number of bits, and then shift back to replace those dropped bits with 0s. This reduces the quality of the sound by representing it with less bits.
+        v = (v >> drop) << drop;
+        return (short) v;
     }
 
     @Override
     public AudioClip applyEffect(AudioClip clip) {
-        ArrayList<Short> newSamples = new ArrayList<>(clip.getSamples().size());
-        for (Short sample : clip.getSamples()) {
-            newSamples.add(crushSample(sample));
+        ArrayList<Short> out = new ArrayList<>(clip.getSamples());
+        //go through each sample and crush it
+        for (int i = 0; i < clip.getSamples().size(); i++) {
+            out.set(i, crushSample(out.get(i), keepBits));
         }
-        return new AudioClip(clip.getFileName() + "_bitCrushed", newSamples, clip.getHeader().clone());
+        return new AudioClip(clip.getFileName() + "_bitcrush_" + keepBits + "bit", out, clip.getHeader().clone());
     }
 }
